@@ -22,7 +22,6 @@ find_package(Eigen REQUIRED)
 
 catkin_package(
   CATKIN_DEPENDS
-  DEPENDS system_lib
 )
 
 include_directories(

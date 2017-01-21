@@ -1,31 +1,34 @@
 #include <ros/ros.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/core/core.hpp>
-#include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-#include <tf/transform_broadcaster.h>
-#include <sensor_msgs/image_encodings.h>
+#include "image_publisher.hpp"
 
-
-int main(int argc, char** argv)
+namespace universal_map_server {
+  
+ImagePublisher::ImagePublisher(ros::NodeHandle& nodeHandle)
+    : nodeHandle_(nodeHandle),
+      published_(false)
 {
-  ros::init(argc, argv, "image_publisher");
-  ros::NodeHandle nh;
+  readParameters();
+}
 
-  ros::Time start_time = ros::Time::now();
-  ros::Duration timeout(10.0);
+ImagePublisher::~ImagePublisher()
+{ 
+}
 
-  cv::Mat cv_image;
+bool ImagePublisher::readParameters()
+{
+  nodeHandle_.param("file_path", filePath_, std::string("../maps/gaisyuu_for_costmap_edit.png"));
+  nodeHandle_.param("image_topic", imageTopic_, std::string("image"));
+  nodeHandle_.param("frame_id", frameId_, std::string("map"));
+}
+
+void ImagePublisher::imageToTopic()
+{
   //cv_image = cv::imread("/home/tera/catkin_ws/src/traversal_layer/maps/mymap_for_costmap.png",CV_LOAD_IMAGE_COLOR);
-  cv_image = cv::imread("/home/tera/catkin_ws/src/traversal_layer/maps/gaisyuu_for_costmap_edit.png",CV_LOAD_IMAGE_COLOR);
-  float angle = 90, scale = 1.0;
+  cv_image = cv::imread(filePath_, CV_LOAD_IMAGE_COLOR);
   cv::Point2f center(cv_image.cols*0.5+7, cv_image.rows*0.5);
   const cv::Mat affine_matrix = cv::getRotationMatrix2D(center, angle, scale);
-  cv::Mat rot_cv_image;
   cv::warpAffine(cv_image, rot_cv_image, affine_matrix, cv_image.size());
 
-  int origin_x, origin_y, cut_x, cut_y;
   origin_x = rot_cv_image.cols*0.5-cv_image.rows*0.5;
   origin_y = 0;
   cut_x = cv_image.rows;
@@ -38,16 +41,28 @@ int main(int argc, char** argv)
 //  out_image.image = rot_cv_image;
   out_image.image = cut_image;
 
-  sensor_msgs::Image ros_image;
   out_image.toImageMsg(ros_image);
-  ros_image.header.frame_id = "/map";
+  ros_image.header.frame_id = frameId_;
 
-  ros::Publisher pub = nh.advertise<sensor_msgs::Image>("/map_image", 1);
   ros::Rate loop_rate(1);
+}
 
+}
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "image_publisher");
+  ros::NodeHandle nh("~");
+  universal_map_server::ImagePublisher imagePublisher(nh);
+  imagePublisher.imageToTopic();
+  imagePublisher.pubImage_ = nh.advertise<sensor_msgs::Image>(imagePublisher.imageTopic_, 1, true);
+
+  ros::Time start_time = ros::Time::now();
+  ros::Duration timeout(10.0);
+  ros::Rate loop_rate(1);
   while(ros::Time::now() - start_time < timeout)
   {
-    pub.publish(ros_image);
+    imagePublisher.pubImage_.publish(imagePublisher.ros_image);
     loop_rate.sleep();
   }
 }

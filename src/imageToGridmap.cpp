@@ -3,7 +3,7 @@
 namespace universal_map_server {
   
 ImageToGridmap::ImageToGridmap(ros::NodeHandle& nodeHandle)
-    : nodeHandle_(nodeHandle_),
+    : nodeHandle_(nodeHandle),
       map_(grid_map::GridMap({"elevation"})),
       mapInitialized_(false)
 {
