@@ -65,4 +65,5 @@ int main(int argc, char** argv)
     imagePublisher.pubImage_.publish(imagePublisher.ros_image);
     loop_rate.sleep();
   }
+//ros::spin();
 }

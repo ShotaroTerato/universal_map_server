@@ -10,7 +10,7 @@ ImageToGridmap::ImageToGridmap(ros::NodeHandle& nodeHandle)
   readParameters();
   map_.setBasicLayers({"elevation"});
   imageSubscriber_ = nodeHandle_.subscribe(imageTopic_, 1, &ImageToGridmap::imageCallback, this);
-//  gridMapPublisher_ = nodeHandle_.advertise<grid_map_msgs::GridMap>("grid_map", 1, true);
+  gridMapPublisher_ = nodeHandle_.advertise<grid_map_msgs::GridMap>("grid_map", 1, true);
 }
 
 ImageToGridmap::~ImageToGridmap()
@@ -19,10 +19,10 @@ ImageToGridmap::~ImageToGridmap()
 
 bool ImageToGridmap::readParameters()
 {
-  nodeHandle_.param("image_topic", imageTopic_, std::string("/image"));
+  nodeHandle_.param("image_topic", imageTopic_, std::string("/image_publisher/image"));
   nodeHandle_.param("resolution", resolution_, 0.05);
   nodeHandle_.param("min_height", minHeight_, 0.0); //Black
-  nodeHandle_.param("max_height", maxHeight_, 255.0); //White
+  nodeHandle_.param("max_height", maxHeight_, 1.0); //White
   return true;
 }
 
@@ -34,7 +34,8 @@ void ImageToGridmap::imageCallback(const sensor_msgs::Image& msg)
             map_.getLength().y(), map_.getSize()(0), map_.getSize()(1));
     mapInitialized_ = true;
   }
-  grid_map::GridMapRosConverter::addLayerFromImage(msg, imageTopic_, map_, minHeight_, maxHeight_);
+  grid_map::GridMapRosConverter::addLayerFromImage(msg, "elevation", map_, minHeight_, maxHeight_);
+  grid_map::GridMapRosConverter::addColorLayerFromImage(msg, "color", map_);
 
   // Publish as grid map.
   grid_map_msgs::GridMap mapMessage;
