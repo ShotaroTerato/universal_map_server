@@ -34,12 +34,12 @@ void ImageToGridmap::imageCallback(const sensor_msgs::Image& msg)
             map_.getLength().y(), map_.getSize()(0), map_.getSize()(1));
     mapInitialized_ = true;
   }
-grid_map::GridMapRosConverter::addLayerFromImage(msg, imageTopic_, map_, minHeight_, maxHeight_);
+  grid_map::GridMapRosConverter::addLayerFromImage(msg, imageTopic_, map_, minHeight_, maxHeight_);
 
-// Publish as grid map.
-//grid_map_msgs::GridMap mapMessage;
-//grid_map::GridMapRosConverter::toMessage(map_, mapMessage);
-//gridMapPublisher_.publish(mapMessage);
+  // Publish as grid map.
+  grid_map_msgs::GridMap mapMessage;
+  grid_map::GridMapRosConverter::toMessage(map_, mapMessage);
+  gridMapPublisher_.publish(mapMessage);
 }
 
 } // namespace

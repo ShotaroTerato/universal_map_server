@@ -9,9 +9,9 @@ int main(int argc, char** argv)
   
   imageToGridmap.gridMapPublisher_ = nh.advertise<grid_map_msgs::GridMap>("grid_map", 1, true);
   // Publish as grid map.
-  grid_map_msgs::GridMap mapMessage;
-  grid_map::GridMapRosConverter::toMessage(imageToGridmap.map_, mapMessage);
-  imageToGridmap.gridMapPublisher_.publish(mapMessage);
+//  grid_map_msgs::GridMap mapMessage;
+//  grid_map::GridMapRosConverter::toMessage(imageToGridmap.map_, mapMessage);
+//  imageToGridmap.gridMapPublisher_.publish(mapMessage);
   ros::spin();
   return 0;
 }
