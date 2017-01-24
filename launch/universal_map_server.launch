@@ -1,0 +1,6 @@
+<launch>
+  <rosparam command="load" file="$(find universal_map_server)/maps/tsudanuma2_0to05.yaml" />
+  <node pkg="universal_map_server" type="universal_map_server" name="universal_map_server" output="screen" />
+  <node pkg="universal_map_server" type="image_publisher" name="image_publisher" output="screen" />
+  <node name="rviz" pkg="rviz" type="rviz" /> args="<!---d $(find universal_map_server)/rviz/grid_map.rviz" /-->
+</launch>

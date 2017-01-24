@@ -16,8 +16,8 @@ ImagePublisher::~ImagePublisher()
 
 bool ImagePublisher::readParameters()
 {
-  nodeHandle_.param("file_path", filePath_, std::string("/home/tera/catkin_ws/src/universal_map_server/maps/gaisyuu_for_costmap_edit.png"));
-  nodeHandle_.param("image_topic", imageTopic_, std::string("image"));
+  nodeHandle_.param("file_path", filePath_, std::string("/home/tera/catkin_ws/src/universal_map_server/maps/tsudanuma2_0to05.png"));
+  nodeHandle_.param("image_topic", imageTopic_, std::string("/image"));
   nodeHandle_.param("frame_id", frameId_, std::string("map"));
 }
 
