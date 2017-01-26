@@ -23,6 +23,7 @@ private:
   ros::NodeHandle& nodeHandle_;
   ros::Subscriber imageSubscriber_;
   std::string imageTopic_;
+  std::string layerName_;
   double mapLengthX_;
   double resolution_;
   double minHeight_;
