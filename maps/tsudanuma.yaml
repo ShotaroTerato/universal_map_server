@@ -1,0 +1,6 @@
+universal_map_server:
+  resolution: "0.05"
+  min_height: 0.0
+  max_height: 0.5
+  layer_name: "layer2"
+  file_path: /home/tera/catkin_ws/src/universal_map_server/maps/tsudanuma.png

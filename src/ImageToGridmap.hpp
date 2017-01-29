@@ -20,19 +20,21 @@ public:
   ImageToGridmap(ros::NodeHandle& nodeHandle);
   virtual ~ImageToGridmap();
   bool readParameters();
+  void imageCallback(const sensor_msgs::Image& msg);
   void imageToMsg();
-  void addLayer(const sensor_msgs::Image& msg);
-  ros::Publisher gridMapPublisher_;
+  void imageSubscriber();
+  void addLayer(const sensor_msgs::Image& msg, const std::string& layerName);
   grid_map::GridMap map_;
   sensor_msgs::Image image_;
   double resolution_;
   sensor_msgs::Image ros_image_;
+  std::string imageTopic_;
+  std::string filePath_;
+  std::string layerName_;
   
 private:
   ros::NodeHandle& nodeHandle_;
   ros::Subscriber imageSubscriber_;
-  std::string imageTopic_;
-  std::string layerName_;
   double mapLengthX_;
   double minHeight_;
   double maxHeight_;
@@ -42,7 +44,6 @@ private:
   cv::Mat rot_cv_image_;
   int origin_x, origin_y, cut_x, cut_y;
   bool published_;
-  std::string filePath_;
   std::string frameId_; 
   bool mapInitialized_;
 };
