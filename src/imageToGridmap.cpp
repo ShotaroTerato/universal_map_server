@@ -17,7 +17,7 @@ bool ImageToGridmap::readParameters()
 {
   nodeHandle_.param("resolution", resolution_, 0.05);
   nodeHandle_.param("min_height", minHeight_, 0.0); //Black
-  nodeHandle_.param("max_height", maxHeight_, 1.0); //White
+  nodeHandle_.param("max_height", maxHeight_, 0.5); //White
   nodeHandle_.param("frame_id", frameId_, std::string("map"));
   return true;
 }
@@ -53,7 +53,7 @@ void ImageToGridmap::addLayer(const sensor_msgs::Image& msg, const std::string& 
             map_.getLength().y(), map_.getSize()(0), map_.getSize()(1));
     mapInitialized_ = true;
   }
-  grid_map::GridMapRosConverter::addColorLayerFromImage(msg, layerName, map_);
+  grid_map::GridMapRosConverter::addLayerFromImage(msg, layerName, map_, minHeight_, maxHeight_);
 
 }
 
