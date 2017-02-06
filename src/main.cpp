@@ -6,7 +6,7 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "universal_map_server");
   ros::NodeHandle nh("~");
-  ros::Publisher gridMapPublisher = nh.advertise<grid_map_msgs::GridMap>("grid_map", 1, true);
+  ros::Publisher gridMapPublisher = nh.advertise<grid_map_msgs::GridMap>("/grid_map", 1, true);
   
   //first map and layer
   universal_map_server::ImageToGridmap imageToGridmap(nh);
