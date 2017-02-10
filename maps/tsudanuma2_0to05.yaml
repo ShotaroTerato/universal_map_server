@@ -1,11 +1,7 @@
-universal_map_server:
-  image_topic: "/image"
-  resolution: "0.05"
+tsudanuma_map_2:
+  resolution: 0.05
   min_height: 0.0
   max_height: 0.5
-  layer_name: "layer1"
-
-image_publisher:
-  file_path: /home/tera/catkin_ws/src/universal_map_server/maps/tsudanuma2_0to05.png
-  image_topic: "/image"
+  layer_name: "layer2"
   frame_id: "map"
+  file_path: "/home/tera/catkin_ws/src/universal_map_server/maps/tsudanuma2_0to05.png"

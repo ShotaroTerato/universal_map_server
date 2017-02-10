@@ -19,7 +19,7 @@ class ImageToGridmap
 public:
   ImageToGridmap(ros::NodeHandle& nodeHandle);
   virtual ~ImageToGridmap();
-  bool readParameters();
+  void readParameters(const std::string& map_name);
   void imageCallback(const sensor_msgs::Image& msg);
   void imageToMsg();
   void imageSubscriber();

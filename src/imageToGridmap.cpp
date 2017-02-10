@@ -6,20 +6,21 @@ ImageToGridmap::ImageToGridmap(ros::NodeHandle& nodeHandle)
     : nodeHandle_(nodeHandle),
       mapInitialized_(false)
 {
-  readParameters();
+  //readParameters();
 }
 
 ImageToGridmap::~ImageToGridmap()
 {
 }
 
-bool ImageToGridmap::readParameters()
+void ImageToGridmap::readParameters(const std::string& map_name)
 {
-  nodeHandle_.param("resolution", resolution_, 0.05);
-  nodeHandle_.param("min_height", minHeight_, 0.0); //Black
-  nodeHandle_.param("max_height", maxHeight_, 0.5); //White
-  nodeHandle_.param("frame_id", frameId_, std::string("map"));
-  return true;
+  nodeHandle_.param(map_name+"/resolution", resolution_, 0.05);
+  nodeHandle_.param(map_name+"/min_height", minHeight_, 0.0); //Black
+  nodeHandle_.param(map_name+"/max_height", maxHeight_, 0.5); //White
+  nodeHandle_.param(map_name+"/frame_id", frameId_, std::string("map"));
+  nodeHandle_.param(map_name+"/file_path", filePath_, std::string("/home/tera/catkin_ws/src/universal_map_server/maps/tsudanuma.png"));
+  nodeHandle_.param(map_name+"/layer_name", layerName_, std::string("first_layer"));
 }
 
 void ImageToGridmap::imageToMsg()

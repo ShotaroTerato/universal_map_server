@@ -32,13 +32,14 @@ include_directories(
 
 add_executable(universal_map_server 
 src/imageToGridmap.cpp
+src/map_convertor.cpp
 src/main.cpp)
 
 add_executable(image_publisher
 src/image_publisher.cpp)
 
-add_executable(map_convertor
-src/map_convertor.cpp)
+#add_executable(map_convertor
+#src/map_convertor.cpp)
 
 target_link_libraries(universal_map_server
    ${catkin_LIBRARIES}
@@ -48,6 +49,6 @@ target_link_libraries(image_publisher
    ${catkin_LIBRARIES}
 )
 
-target_link_libraries(map_convertor
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(map_convertor
+#  ${catkin_LIBRARIES}
+#)
