@@ -24,7 +24,7 @@ public:
   void thresholding(grid_map::GridMap& in_grid_map, const std::string& layer);
   void mergeLayer(grid_map::GridMap& in_grid_map, const std::string& origin_layer, const std::string& add_layer);
   void toCvImage(const grid_map::GridMap& in_grid_map, const std::string& to_image_layer);
-  bool readParameters();
+  void readParameters(const std::string& robot_name);
   sensor_msgs::Image ros_image_;
 
 private:

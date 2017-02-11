@@ -5,7 +5,6 @@ namespace map_convertor {
 MapConvertor::MapConvertor(ros::NodeHandle& nodeHandle)
     : nodeHandle_(nodeHandle)
 {
-  readParameters();
   //gridMapSubscriber_ = nodeHandle_.subscribe("/grid_map", 1, &MapConvertor::mapCallback, this);
   //occMapPublisher_ = nodeHandle_.advertise<nav_msgs::OccupancyGrid>("/occ_map", 1, true);
   //imagePublisher_ = nodeHandle_.advertise<sensor_msgs::Image>("/occ_image", 1, true);
@@ -16,12 +15,9 @@ MapConvertor::~MapConvertor()
 {
 }
 
-bool MapConvertor::readParameters()
+void MapConvertor::readParameters(const std::string& robot_name)
 {
-  nodeHandle_.param("min_height", minHeight_, 0.0);
-  nodeHandle_.param("max_height", maxHeight_, 0.5);
-  nodeHandle_.param("max_traversable_step_height", occThreshold_, 0.02);
-  return true;
+  nodeHandle_.param(robot_name+"/max_traversable_step_height", occThreshold_, 0.02);
 }
 
 void MapConvertor::mapCallback(const grid_map_msgs::GridMap& grid_map_msgs)
@@ -31,6 +27,16 @@ void MapConvertor::mapCallback(const grid_map_msgs::GridMap& grid_map_msgs)
 
 void MapConvertor::thresholding(grid_map::GridMap& in_grid_map, const std::string& layer)
 { 
+  minHeight_ = 0.0; //initial value
+  maxHeight_ = 0.0; //initial value
+  for(grid_map::GridMapIterator iterator(in_grid_map); !iterator.isPastEnd(); ++iterator){
+    if(in_grid_map.at(layer, *iterator) < minHeight_){
+      minHeight_ = in_grid_map.at(layer, *iterator);
+    }else if(in_grid_map.at(layer, *iterator) > maxHeight_){
+      maxHeight_ = in_grid_map.at(layer, *iterator);
+    }
+  }
+  
   double threshold = maxHeight_ - minHeight_ - occThreshold_;
   for(grid_map::GridMapIterator iterator(in_grid_map); !iterator.isPastEnd(); ++iterator){
     if(in_grid_map.at(layer, *iterator) <= (threshold)){
@@ -55,22 +61,3 @@ void MapConvertor::toCvImage(const grid_map::GridMap& in_grid_map, const std::st
 }
 
 }//namespace
-
-//int main(int argc, char** argv)
-//{
-//  ros::init(argc, argv, "map_convertor");
-//  ros::NodeHandle nh("~");
-//  map_convertor::MapConvertor mapConvertor(nh);
-//  map_convertor::MapConvertor mapConvertor_2(nh);
-//  ros::Publisher imagePublisher = nh.advertise<sensor_msgs::Image>("/occ_image", 1, true);
-//  
-//  mapConvertor.thresholding("layer1");
-//  mapConvertor_2.thresholding("layer2");
-//  mapConvertor.mergeLayer("layer1", "layer2");
-//  mapConvertor.toCvImage("layer1");
-//  
-//  //Publish as image
-//  imagePublisher.publish(mapConvertor.ros_image_);
-//  ros::spin();
-//  return 0;
-//}

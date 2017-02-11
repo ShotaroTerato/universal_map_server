@@ -1,6 +1,7 @@
 <launch>
   <rosparam command="load" file="$(find universal_map_server)/maps/tsudanuma2_0to05.yaml" />
   <rosparam command="load" file="$(find universal_map_server)/maps/tsudanuma.yaml" />
+  <rosparam command="load" file="$(find universal_map_server)/param/robot_param.yaml" />
   <!--<node pkg="universal_map_server" type="image_publisher" name="image_publisher" output="screen" />-->
   <node pkg="universal_map_server" type="universal_map_server" name="universal_map_server" output="screen" />
   <!-- <node pkg="universal_map_server" type="map_convertor" name="map_convertor" output="screen" />-->

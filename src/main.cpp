@@ -25,10 +25,12 @@ int main(int argc, char** argv)
   //merge all layer and convert occ map image
   map_convertor::MapConvertor mapConvertor(nh);
   map_convertor::MapConvertor mapConvertor_2(nh);
-  mapConvertor.thresholding(imageToGridmap.map_, "layer1");
-  mapConvertor_2.thresholding(imageToGridmap.map_, "layer2");
-  mapConvertor.mergeLayer(imageToGridmap.map_, "layer1", "layer2");
-  mapConvertor.toCvImage(imageToGridmap.map_, "layer1");
+  mapConvertor.readParameters("/orne_alpha");
+  mapConvertor_2.readParameters("/orne_alpha");
+  mapConvertor.thresholding(imageToGridmap.map_, imageToGridmap.layerName_);
+  mapConvertor_2.thresholding(imageToGridmap.map_, imageToGridmap_2.layerName_);
+  mapConvertor.mergeLayer(imageToGridmap.map_, imageToGridmap.layerName_, imageToGridmap_2.layerName_);
+  mapConvertor.toCvImage(imageToGridmap.map_, imageToGridmap.layerName_);
   
   // Publish grid map and image
   grid_map_msgs::GridMap mapMessage;
